@@ -2,9 +2,9 @@ package coding.dreams.service;
 
 import coding.dreams.model.ContaBancaria;
 import coding.dreams.model.PessoaFisica;
+import coding.dreams.model.Endereco;
 import coding.dreams.repository.PessoaFisicaRepository;
 import coding.dreams.exceptions.VerificacaoSistemaException;
-import coding.dreams.model.Endereco;
 import coding.dreams.repository.ContaBancariaRepository;
 import coding.dreams.repository.EnderecoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +27,34 @@ public class PessoaFisicaService {
     @Autowired
     private ContaBancariaRepository contaBancariaRepository;
 
+    @Autowired
+    private ViaCepService viaCepService;
+
+    // Strategy: Implementar os métodos definidos na interface.*
+    // Facade: Abstrair integrações com subsistemas, provendo uma interface simples.*
+
     public Optional<PessoaFisica> realizarConsultaPF(String cpf) {
         return pessoaFisicaRepository.findById(cpf);
     }
 
     public PessoaFisica cadastrarPF(PessoaFisica pessoaFisica) {//vamos realizar o cadastro do banco juntamente com o cadastro da pessoa, por isso criamos o metodo cadastrarConta e chamamos conta em pessoa
         
-        Endereco endereco = enderecoRepository.save(pessoaFisica.getEndereco());
-        pessoaFisica.setEndereco(endereco);
+        //Endereco endereco = enderecoRepository.save(pessoaFisica.getEndereco());
+        //Verificar se o endereço da pf já existe (id endereço)*
+
+        Long IdEndereco = pessoaFisica.getEndereco().getIdEndereco();
+        String cep = pessoaFisica.getEndereco().getCep();
+        Endereco endereco = enderecoRepository.findById(IdEndereco).orElseGet(() -> {
+
+            //Caso não exista, integrar com o ViaCep e persistir o retorno.
+
+            Endereco novoEndereco = viaCepService.consultarCep(cep);
+            enderecoRepository.save(novoEndereco);
+            return novoEndereco;
+                });
+        pessoaFisica.setEndereco(endereco);//*
+        // Inserir Cliente, vinculando o Endereco (novo ou existente).
+        pessoaFisicaRepository.save(pessoaFisica);
 
         ContaBancaria conta= contaBancariaService.cadastrarConta(pessoaFisica.getContaBancaria());
         int tipoChavePix =  conta.getTipoChavePix();//pega um int que difere qual tipo de chave pix será cadastrada

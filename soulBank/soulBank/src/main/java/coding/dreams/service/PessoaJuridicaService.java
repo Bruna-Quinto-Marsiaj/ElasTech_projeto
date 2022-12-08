@@ -28,14 +28,31 @@ public class PessoaJuridicaService {
     @Autowired
     private ContaBancariaRepository contaBancariaRepository;
 
+    @Autowired
+    private ViaCepService viaCepService;
+
     public Optional<PessoaJuridica> realizarConsultaPJ(String cnpj) {
         return pessoaJuridicaRepository.findById(cnpj);
     }
 
     public PessoaJuridica cadastrarPJ(PessoaJuridica pessoaJuridica) {
 
-        Endereco endereco = enderecoRepository.save(pessoaJuridica.getEndereco());
-        pessoaJuridica.setEndereco(endereco);
+        //Endereco endereco = enderecoRepository.save(pessoaJuridica.getEndereco());
+        //pessoaJuridica.setEndereco(endereco);
+
+        Long IdEndereco = pessoaJuridica.getEndereco().getIdEndereco();
+        String cep = pessoaJuridica.getEndereco().getCep();
+        Endereco endereco = enderecoRepository.findById(IdEndereco).orElseGet(() -> {
+
+            //Caso não exista, integrar com o ViaCep e persistir o retorno.
+
+            Endereco novoEndereco = viaCepService.consultarCep(cep);
+            enderecoRepository.save(novoEndereco);
+            return novoEndereco;
+        });
+        pessoaJuridica.setEndereco(endereco);//*
+        // Inserir Cliente, vinculando o Endereco (novo ou existente).
+        pessoaJuridicaRepository.save(pessoaJuridica);
 
         ContaBancaria conta= contaBancariaService.cadastrarConta(pessoaJuridica.getContaBancaria());//cofirmar como fazer associação com a camis
         int tipoChavePix =  conta.getTipoChavePix();//pega um int que difere qual tipo de chave pix será cadastrada
