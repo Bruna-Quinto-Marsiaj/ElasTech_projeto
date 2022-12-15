@@ -32,12 +32,12 @@ public class PessoaFisicaService {
         return pessoaFisicaRepository.findById(cpf);
     }
 
-    public PessoaFisica cadastrarPF(PessoaFisicaDto pessoaFisica) {//vamos realizar o cadastro do banco juntamente com o cadastro da pessoa, por isso criamos o metodo cadastrarConta e chamamos conta em pessoa
+    public PessoaFisicaDto cadastrarPF(PessoaFisicaDto pessoaFisicaDto) {//vamos realizar o cadastro do banco juntamente com o cadastro da pessoa, por isso criamos o metodo cadastrarConta e chamamos conta em pessoa
         
-        Endereco endereco = enderecoRepository.save(pessoaFisica.getEndereco());
-        pessoaFisica.setEndereco(endereco);
+        Endereco endereco = enderecoRepository.save(pessoaFisicaDto.getEndereco());
+        pessoaFisicaDto.setEndereco(endereco);
 
-        ContaBancaria conta= contaBancariaService.cadastrarConta(pessoaFisica.getContaBancaria());
+        ContaBancaria conta= contaBancariaService.cadastrarConta(pessoaFisicaDto.getContaBancaria());
         int tipoChavePix =  conta.getTipoChavePix();//pega um int que difere qual tipo de chave pix será cadastrada
         
         switch (tipoChavePix) {
@@ -47,17 +47,17 @@ public class PessoaFisicaService {
             break;
 
             case 2: //CPF / CNPJ
-                String chaveCpf = pessoaFisica.getCpf();
+                String chaveCpf = pessoaFisicaDto.getCpf();
                 conta.setChavePix(chaveCpf);
             break;
 
             case 3: //telefone
-                String chaveTelefone = pessoaFisica.getTelefone();
+                String chaveTelefone = pessoaFisicaDto.getTelefone();
                 conta.setChavePix(chaveTelefone);
             break;
 
             case 4: //email
-                String chaveEmail = pessoaFisica.getEmail();
+                String chaveEmail = pessoaFisicaDto.getEmail();
                 conta.setChavePix(chaveEmail);
             break;
 
@@ -66,21 +66,21 @@ public class PessoaFisicaService {
             break;
         }
 
-        pessoaFisica.setContaBancaria(conta);
-        pessoaFisica = pessoaFisicaRepository.save(pessoaFisica);//ao cadastrar, pegar a alternativa do cliente de qual dado usar (cpf/cnpj, telefone, email), e cadastrar no banco de dados esse dado
+        pessoaFisicaDto.setContaBancaria(conta);
+        pessoaFisicaDto = pessoaFisicaRepository.save(pessoaFisicaDto);//ao cadastrar, pegar a alternativa do cliente de qual dado usar (cpf/cnpj, telefone, email), e cadastrar no banco de dados esse dado
                          
-        return pessoaFisica;
+        return pessoaFisicaDto;
     }
 
-    public PessoaFisicaDto realizarAlteracaoPF(PessoaFisicaDto pessoaFisica) throws VerificacaoSistemaException {
-        Endereco endereco = enderecoRepository.save(pessoaFisica.getEndereco());
-        pessoaFisica.setEndereco(endereco);
+    public PessoaFisicaDto realizarAlteracaoPF(PessoaFisicaDto pessoaFisicaDto) throws VerificacaoSistemaException {
+        Endereco endereco = enderecoRepository.save(pessoaFisicaDto.getEndereco());
+        pessoaFisicaDto.setEndereco(endereco);
 
 
-        ContaBancaria conta= contaBancariaService.realizarAlteracaoConta(pessoaFisica.getContaBancaria());
+        ContaBancaria conta= contaBancariaService.realizarAlteracaoConta(pessoaFisicaDto.getContaBancaria());
         //para a realização do soft delete será alterado o status da conta de ativa para inativa
         //ao inativar cliente, automaticamente inativa a conta
-        if (pessoaFisica.getStatusCliente() == false){
+        if (pessoaFisicaDto.getStatusCliente() == false){
             double saldo = conta.getSaldo();
 
             if(saldo==0){
@@ -88,7 +88,7 @@ public class PessoaFisicaService {
                 conta.setStatusConta(false);
             }else{
                 conta.setStatusConta(true);
-                pessoaFisica.setStatusCliente(true);
+                pessoaFisicaDto.setStatusCliente(true);
 
                 throw new VerificacaoSistemaException("Não é possível cancelar a conta, pois ainda tem saldo.");
             }
@@ -104,17 +104,17 @@ public class PessoaFisicaService {
                 break;
 
             case 2: //CPF / CNPJ
-                String chaveCpf = pessoaFisica.getCpf();
+                String chaveCpf = pessoaFisicaDto.getCpf();
                 conta.setChavePix(chaveCpf);
                 break;
 
             case 3: //telefone
-                String chaveTelefone = pessoaFisica.getTelefone();
+                String chaveTelefone = pessoaFisicaDto.getTelefone();
                 conta.setChavePix(chaveTelefone);
                 break;
 
             case 4: //email
-                String chaveEmail = pessoaFisica.getEmail();
+                String chaveEmail = pessoaFisicaDto.getEmail();
                 conta.setChavePix(chaveEmail);
                 break;
 
@@ -123,7 +123,7 @@ public class PessoaFisicaService {
                 break;
         }
 
-        pessoaFisica.setContaBancaria(conta);
-        return pessoaFisicaRepository.save(pessoaFisica);
+        pessoaFisicaDto.setContaBancaria(conta);
+        return pessoaFisicaRepository.save(pessoaFisicaDto);
     }
 }

@@ -30,14 +30,14 @@ public class PessoaFisicaController {
     }
     
     @PostMapping //Cadastra e altera endereço e conta bancária junto
-    public ResponseEntity<PessoaFisicaDto> cadastrarPF(@RequestBody PessoaFisica pessoaFisica){
-        return ResponseEntity.ok(pessoaFisicaService.cadastrarPF(PessoaFisica));
+    public ResponseEntity<PessoaFisicaDto> cadastrarPF(@RequestBody PessoaFisicaDto pessoaFisicaDto){
+        return ResponseEntity.ok(pessoaFisicaService.cadastrarPF(PessoaFisicaDto));
     }
     @PutMapping
-    public ResponseEntity realizarAlteracaoPF(@RequestBody PessoaFisica pessoaFisica){
+    public ResponseEntity realizarAlteracaoPF(@RequestBody PessoaFisicaDto pessoaFisicaDto){
 
         try{
-            return ResponseEntity.ok(pessoaFisicaService.realizarAlteracaoPF(pessoaFisica));
+            return ResponseEntity.ok(pessoaFisicaService.realizarAlteracaoPF(pessoaFisicaDto));
         } catch(VerificacaoSistemaException e){
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
