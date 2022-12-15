@@ -15,16 +15,21 @@ import lombok.NoArgsConstructor;
 
 public class PessoaFisicaDto {
 
+
+    private String cpf;
     private String rg;//somente os dados que queremos retornar, tirei a senha
     private String nome;
     private Endereco endereco;
     private ContaBancaria contaBancaria;
+    private String email;
+    private String telefone;
+    private boolean statusCliente;
 
-    public PessoaFisicaDto(PessoaFisica pessoaFisica) {
+    /*public PessoaFisicaDto(PessoaFisica pessoaFisica) {
         this.rg = pessoaFisica.getRg();
         this.nome = pessoaFisica.getNome();
         this.endereco = pessoaFisica.getEndereco();
-        this.contaBancaria = pessoaFisica.getContaBancaria();
+        this.contaBancaria = pessoaFisica.getContaBancaria();*/
     }
     /*public PessoaFisicaDto(Cliente pessoaFisica) {
         super.email = Cliente.getEmail();
@@ -33,5 +38,4 @@ public class PessoaFisicaDto {
 
 
 
-    }
-}
+

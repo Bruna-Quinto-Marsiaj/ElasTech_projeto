@@ -28,16 +28,16 @@ public class PessoaFisicaService {
     @Autowired
     private ContaBancariaRepository contaBancariaRepository;
 
-    public Optional<PessoaFisicaDto> realizarConsultaPF(String cpf) {
+    public Optional<PessoaFisica> realizarConsultaPF(String cpf) {
         return pessoaFisicaRepository.findById(cpf);
     }
 
-    public PessoaFisicaDto cadastrarPF(PessoaFisicaDto pessoaFisicaDto) {//vamos realizar o cadastro do banco juntamente com o cadastro da pessoa, por isso criamos o metodo cadastrarConta e chamamos conta em pessoa
+    public PessoaFisica cadastrarPF(PessoaFisica pessoaFisica) {//vamos realizar o cadastro do banco juntamente com o cadastro da pessoa, por isso criamos o metodo cadastrarConta e chamamos conta em pessoa
         
-        Endereco endereco = enderecoRepository.save(pessoaFisicaDto.getEndereco());
-        pessoaFisicaDto.setEndereco(endereco);
+        Endereco endereco = enderecoRepository.save(pessoaFisica.getEndereco());
+        pessoaFisica.setEndereco(endereco);
 
-        ContaBancaria conta= contaBancariaService.cadastrarConta(pessoaFisicaDto.getContaBancaria());
+        ContaBancaria conta= contaBancariaService.cadastrarConta(pessoaFisica.getContaBancaria());
         int tipoChavePix =  conta.getTipoChavePix();//pega um int que difere qual tipo de chave pix será cadastrada
         
         switch (tipoChavePix) {
@@ -47,17 +47,17 @@ public class PessoaFisicaService {
             break;
 
             case 2: //CPF / CNPJ
-                String chaveCpf = pessoaFisicaDto.getCpf();
+                String chaveCpf = pessoaFisica.getCpf();
                 conta.setChavePix(chaveCpf);
             break;
 
             case 3: //telefone
-                String chaveTelefone = pessoaFisicaDto.getTelefone();
+                String chaveTelefone = pessoaFisica.getTelefone();
                 conta.setChavePix(chaveTelefone);
             break;
 
             case 4: //email
-                String chaveEmail = pessoaFisicaDto.getEmail();
+                String chaveEmail = pessoaFisica.getEmail();
                 conta.setChavePix(chaveEmail);
             break;
 
@@ -66,10 +66,10 @@ public class PessoaFisicaService {
             break;
         }
 
-        pessoaFisicaDto.setContaBancaria(conta);
-        pessoaFisicaDto = pessoaFisicaRepository.save(pessoaFisicaDto);//ao cadastrar, pegar a alternativa do cliente de qual dado usar (cpf/cnpj, telefone, email), e cadastrar no banco de dados esse dado
+        pessoaFisica.setContaBancaria(conta);
+        pessoaFisica = pessoaFisicaRepository.save(pessoaFisica);//ao cadastrar, pegar a alternativa do cliente de qual dado usar (cpf/cnpj, telefone, email), e cadastrar no banco de dados esse dado
                          
-        return pessoaFisicaDto;
+        return pessoaFisica;
     }
 
     public PessoaFisicaDto realizarAlteracaoPF(PessoaFisicaDto pessoaFisicaDto) throws VerificacaoSistemaException {
