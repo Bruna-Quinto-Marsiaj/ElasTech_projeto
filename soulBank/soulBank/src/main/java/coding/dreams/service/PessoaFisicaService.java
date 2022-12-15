@@ -1,5 +1,6 @@
 package coding.dreams.service;
 
+import coding.dreams.dto.PessoaFisicaDto;
 import coding.dreams.model.ContaBancaria;
 import coding.dreams.model.PessoaFisica;
 import coding.dreams.repository.PessoaFisicaRepository;
@@ -27,11 +28,11 @@ public class PessoaFisicaService {
     @Autowired
     private ContaBancariaRepository contaBancariaRepository;
 
-    public Optional<PessoaFisica> realizarConsultaPF(String cpf) {
+    public Optional<PessoaFisicaDto> realizarConsultaPF(String cpf) {
         return pessoaFisicaRepository.findById(cpf);
     }
 
-    public PessoaFisica cadastrarPF(PessoaFisica pessoaFisica) {//vamos realizar o cadastro do banco juntamente com o cadastro da pessoa, por isso criamos o metodo cadastrarConta e chamamos conta em pessoa
+    public PessoaFisica cadastrarPF(PessoaFisicaDto pessoaFisica) {//vamos realizar o cadastro do banco juntamente com o cadastro da pessoa, por isso criamos o metodo cadastrarConta e chamamos conta em pessoa
         
         Endereco endereco = enderecoRepository.save(pessoaFisica.getEndereco());
         pessoaFisica.setEndereco(endereco);
@@ -71,7 +72,7 @@ public class PessoaFisicaService {
         return pessoaFisica;
     }
 
-    public PessoaFisica realizarAlteracaoPF(PessoaFisica pessoaFisica) throws VerificacaoSistemaException {
+    public PessoaFisicaDto realizarAlteracaoPF(PessoaFisicaDto pessoaFisica) throws VerificacaoSistemaException {
         Endereco endereco = enderecoRepository.save(pessoaFisica.getEndereco());
         pessoaFisica.setEndereco(endereco);
 

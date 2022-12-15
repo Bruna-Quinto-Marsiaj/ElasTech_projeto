@@ -1,5 +1,6 @@
 package coding.dreams.controller;
 
+import coding.dreams.dto.PessoaFisicaDto;
 import coding.dreams.exceptions.VerificacaoSistemaException;
 import coding.dreams.model.PessoaFisica;
 import coding.dreams.service.PessoaFisicaService;
@@ -20,7 +21,7 @@ public class PessoaFisicaController {
     @GetMapping("/consultapf/{cpf}") // Decidimos fazer o cliente sem ID automático e declaramos o CPF como ID
     public ResponseEntity<?> realizarConsultaPF(@PathVariable String cpf){
 
-        Optional<PessoaFisica> opcao = pessoaFisicaService.realizarConsultaPF(cpf);
+        Optional<PessoaFisicaDto> opcao = pessoaFisicaService.realizarConsultaPF(cpf);
 
         if(opcao.isPresent()){
             return ResponseEntity.ok(opcao.get());
@@ -29,8 +30,8 @@ public class PessoaFisicaController {
     }
     
     @PostMapping //Cadastra e altera endereço e conta bancária junto
-    public ResponseEntity<PessoaFisica> cadastrarPF(@RequestBody PessoaFisica pessoaFisica){
-        return ResponseEntity.ok(pessoaFisicaService.cadastrarPF(pessoaFisica));
+    public ResponseEntity<PessoaFisicaDto> cadastrarPF(@RequestBody PessoaFisica pessoaFisica){
+        return ResponseEntity.ok(pessoaFisicaService.cadastrarPF(PessoaFisica));
     }
     @PutMapping
     public ResponseEntity realizarAlteracaoPF(@RequestBody PessoaFisica pessoaFisica){

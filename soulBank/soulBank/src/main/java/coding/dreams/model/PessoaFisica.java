@@ -1,9 +1,12 @@
 package coding.dreams.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Data
 
 public class PessoaFisica extends Cliente{
 
@@ -43,13 +46,9 @@ public class PessoaFisica extends Cliente{
         this.contaBancaria=contaBancaria;
     }
 
-    public String getCpf() {
-        return cpf;
-    }
+    public String getCpf() {return cpf;}
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
+    public void setCpf(String cpf) {this.cpf = cpf;}
 
     public String getRg() {
         return rg;
