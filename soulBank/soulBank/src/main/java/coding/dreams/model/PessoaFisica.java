@@ -1,12 +1,16 @@
 package coding.dreams.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Data
+@AllArgsConstructor
+
 
 public class PessoaFisica extends Cliente{
 
