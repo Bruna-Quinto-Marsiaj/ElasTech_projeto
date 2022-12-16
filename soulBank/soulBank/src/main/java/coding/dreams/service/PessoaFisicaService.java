@@ -1,5 +1,6 @@
 package coding.dreams.service;
 
+//import coding.dreams.controller.mappers.PessoaFisicaMapper;
 import coding.dreams.dto.PessoaFisicaDto;
 import coding.dreams.model.ContaBancaria;
 import coding.dreams.model.PessoaFisica;
@@ -8,12 +9,14 @@ import coding.dreams.exceptions.VerificacaoSistemaException;
 import coding.dreams.model.Endereco;
 import coding.dreams.repository.ContaBancariaRepository;
 import coding.dreams.repository.EnderecoRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
 
+@AllArgsConstructor
 @Service
 public class PessoaFisicaService {
     @Autowired
@@ -27,6 +30,10 @@ public class PessoaFisicaService {
 
     @Autowired
     private ContaBancariaRepository contaBancariaRepository;
+
+    private PessoaFisicaDto pessoaFisicaDto;
+
+    //private PessoaFisicaMapper pessoaFisicaMapper;
 
     public Optional<PessoaFisica> realizarConsultaPF(String cpf) {
         return pessoaFisicaRepository.findById(cpf);
@@ -72,7 +79,7 @@ public class PessoaFisicaService {
         return pessoaFisica;
     }
 
-    public PessoaFisicaDto realizarAlteracaoPF(PessoaFisicaDto pessoaFisicaDto) throws VerificacaoSistemaException {
+    public PessoaFisica realizarAlteracaoPF(PessoaFisicaDto pessoaFisicaDto) throws VerificacaoSistemaException {
         Endereco endereco = enderecoRepository.save(pessoaFisicaDto.getEndereco());
         pessoaFisicaDto.setEndereco(endereco);
 

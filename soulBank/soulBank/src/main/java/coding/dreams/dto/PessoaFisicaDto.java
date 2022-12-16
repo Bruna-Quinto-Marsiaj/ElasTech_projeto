@@ -25,6 +25,10 @@ public class PessoaFisicaDto {
     private String telefone;
     private boolean statusCliente;
 
+    public boolean getStatusCliente() {
+        return false;
+    }
+
     /*public PessoaFisicaDto(PessoaFisica pessoaFisica) {
         this.rg = pessoaFisica.getRg();
         this.nome = pessoaFisica.getNome();

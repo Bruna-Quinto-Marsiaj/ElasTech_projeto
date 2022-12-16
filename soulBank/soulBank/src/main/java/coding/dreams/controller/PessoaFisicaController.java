@@ -1,6 +1,6 @@
 package coding.dreams.controller;
 
-
+//import coding.dreams.controller.mappers.PessoaFisicaMapper;
 import coding.dreams.dto.PessoaFisicaDto;
 import coding.dreams.exceptions.VerificacaoSistemaException;
 import coding.dreams.model.PessoaFisica;
@@ -19,6 +19,9 @@ public class PessoaFisicaController {
 
     @Autowired
     private PessoaFisicaService pessoaFisicaService;
+    private PessoaFisica PessoaFisica;
+
+    //private PessoaFisicaMapper pessoaFisicaMapper;
 
 
 
@@ -31,11 +34,11 @@ public class PessoaFisicaController {
             return ResponseEntity.ok(opcao.get());
         }
         return new ResponseEntity<>("Cliente não encontrado.",HttpStatus.NOT_FOUND);
-    }
+    }//coding.dreams.model.
     
     @PostMapping //Cadastra e altera endereço e conta bancária junto
     public ResponseEntity<PessoaFisica> cadastrarPF(@RequestBody PessoaFisicaDto pessoaFisicaDto){
-        return ResponseEntity.ok(pessoaFisicaService.cadastrarPF(PessoaFisicaDto));
+        return ResponseEntity.ok(pessoaFisicaService.cadastrarPF(PessoaFisica));
     }
     @PutMapping
     public ResponseEntity realizarAlteracaoPF(@RequestBody PessoaFisicaDto pessoaFisicaDto){
